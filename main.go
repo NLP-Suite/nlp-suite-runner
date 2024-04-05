@@ -12,14 +12,25 @@ import (
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/mount"
+	"github.com/docker/docker/api/types/network"
 	"github.com/docker/docker/client"
+	"github.com/docker/go-connections/nat"
 )
 
 const (
-	uiImageName    = "hello-world:latest"    // Replace with your actual UI image name
-	agentImageName = "hello-world:latest" // Replace with your actual agent image name
-	agentSourceFolder = "nlp-suite"
-	agentTargetMountPath = "/mnt/lib"
+	uiImageName              = "ghcr.io/nlp-suite/nlp-suite-ui:main"
+	uiIpAddress              = "172.16.0.10"
+	uiPort                   = "8000"
+	agentImageName           = "ghcr.io/nlp-suite/nlp-suite-agent:main"
+	agentIpAddress           = "172.16.0.11"
+	agentPort                = "3000"
+	stanfordCoreNlpImageName = "ghcr.io/nlp-suite/stanford-corenlp-docker:master"
+	stanfordCoreNlpIpAddress = "172.16.0.12"
+	stanfordCoreNlpPort      = "9000"
+	agentSourceFolder        = "nlp-suite"
+	agentTargetMountPath     = "/root/nlp-suite"
+	networkName              = "nlp-suite-network"
+	subnet                   = "172.16.0.0/16"
 )
 
 func main() {
@@ -35,18 +46,31 @@ func main() {
 		return
 	}
 
-	// Pull the latest UI image
-	fmt.Println("Installing the latest version of the NLP Suite UI...")
-	if err := pullImage(ctx, cli, uiImageName); err != nil {
-		fmt.Println("Error pulling UI image:", err)
-		return
-	}
+	defer func() { cleanUp(ctx, cli) }()
 
-	// Pull the latest agent image
-	fmt.Println("Installing the latest version of the NLP Suite Agent...")
-	if err := pullImage(ctx, cli, agentImageName); err != nil {
-		fmt.Println("Error pulling agent image:", err)
-		return
+	if os.Getenv("ENV") != "dev" {
+		// Pull the latest UI image
+		fmt.Println("Installing the latest version of the NLP Suite UI...")
+		if err := pullImage(ctx, cli, uiImageName); err != nil {
+			fmt.Println("Error pulling UI image:", err)
+			return
+		}
+
+		// Pull the latest agent image
+		fmt.Println("Installing the latest version of the NLP Suite Agent...")
+		if err := pullImage(ctx, cli, agentImageName); err != nil {
+			fmt.Println("Error pulling agent image:", err)
+			return
+		}
+
+		// Pull the latest stanford core nlp image
+		fmt.Println("Installing the latest version of Stanford CoreNLP...")
+		if err := pullImage(ctx, cli, stanfordCoreNlpImageName); err != nil {
+			fmt.Println("Error pulling stanford corenlp image:", err)
+			return
+		}
+	} else {
+		fmt.Println("Skipping image installation because detected `dev` flag...")
 	}
 
 	fmt.Println("Validating the NLP Suite Folder...")
@@ -56,30 +80,53 @@ func main() {
 		return
 	}
 
+	fmt.Println("Validating the NLP Suite Input Folder...")
+	_, err = validateMountPoint(path.Join(agentSourceFolder, "input"))
+	if err != nil {
+		fmt.Println("Error creating agent input point:", err)
+		return
+	}
+
+	fmt.Println("Validating the NLP Suite Output Folder...")
+	_, err = validateMountPoint(path.Join(agentSourceFolder, "output"))
+	if err != nil {
+		fmt.Println("Error creating agent output point:", err)
+		return
+	}
+
+	// Create the network
+	fmt.Println("Creating the NLP Suite network...")
+	if err := createNetwork(ctx, cli); err != nil {
+		fmt.Println("Error creating network:", err)
+		return
+	}
+
 	// Run the containers
 	fmt.Println("Starting the NLP Suite UI...")
-	if err := runContainer(ctx, cli, uiImageName, "", ""); err != nil {
+	if err := runContainer(ctx, cli, uiImageName, "", "", uiIpAddress, uiPort); err != nil {
 		fmt.Println("Error running UI container:", err)
 		return
 	}
 
+	fmt.Println("Starting the Stanford CoreNLP Server...")
+	if err := runContainer(ctx, cli, stanfordCoreNlpImageName, "", "", stanfordCoreNlpIpAddress, stanfordCoreNlpPort); err != nil {
+		fmt.Println("Error running stanford corenlp server container:", err, ". The NLP Suite is continuing execution as some tools can be used without it.")
+	}
+
 	fmt.Println("Starting the NLP Suite Agent...")
-	if err := runContainer(ctx, cli, agentImageName, targetMountPath, agentTargetMountPath); err != nil {
+	if err := runContainer(ctx, cli, agentImageName, targetMountPath, agentTargetMountPath, agentIpAddress, agentPort); err != nil {
 		fmt.Println("Error running agent container:", err)
 		return
 	}
 
 	// Wait indefinitely for container exit (or interrupt with Ctrl+C)
 	c := make(chan os.Signal)
-    signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-    go func() {
-        <-c
-		fmt.Println("Exiting -- Cleaning up the NLP Suite...")
-		if err := cleanUp(ctx, cli); err != nil {
-			fmt.Println("Error cleaning up:", err)
-		}
-        os.Exit(0)
-    }()
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		cleanUp(ctx, cli)
+		os.Exit(0)
+	}()
 
 	fmt.Println("The NLP Suite is running... view the UI at http://localhost:8000")
 	select {}
@@ -92,19 +139,18 @@ func pullImage(ctx context.Context, cli *client.Client, imageName string) error 
 		return err
 	}
 	defer reader.Close()
-
-	_, err = io.ReadAll(reader)
+	io.Copy(os.Stdout, reader)
 	return err
 }
 
 // Validates that the mount path exists and creates the folder if it does not
-func validateMountPoint(sourceFolder string) (string, error) {
+func validateMountPoint(folder string) (string, error) {
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return "", err
 	}
 
-	mountPath := path.Join(home, sourceFolder)
+	mountPath := path.Join(home, folder)
 
 	if _, err := os.Stat(mountPath); err != nil {
 		if os.IsNotExist(err) {
@@ -119,29 +165,39 @@ func validateMountPoint(sourceFolder string) (string, error) {
 }
 
 // Runs a container that already exists
-func runContainer(ctx context.Context, cli *client.Client, imageName, sourceMountPath string, targetMountPath string) error {
+func runContainer(ctx context.Context, cli *client.Client, imageName, sourceMountPath, targetMountPath, ip, port string) error {
 	config := &container.Config{
 		Image: imageName,
-		// TODO: Add any additional configuration needed for your containers
 	}
 	hostConfig := &container.HostConfig{
 		Mounts: []mount.Mount{
 			{
-				// TODO: Fix
 				Source: sourceMountPath,
 				Target: targetMountPath,
 				Type:   mount.TypeBind,
 			},
 		},
+		PortBindings: nat.PortMap{
+			nat.Port(fmt.Sprintf("%s/tcp", port)): []nat.PortBinding{{HostIP: "0.0.0.0", HostPort: port}},
+		},
+		NetworkMode: container.NetworkMode(networkName),
+	}
+
+	netConfig := &network.NetworkingConfig{
+		EndpointsConfig: map[string]*network.EndpointSettings{
+			networkName: {
+				IPAMConfig: &network.EndpointIPAMConfig{
+					IPv4Address: ip,
+				},
+			},
+		},
 	}
 
 	if sourceMountPath == "" || targetMountPath == "" {
-		hostConfig = nil
+		hostConfig.Mounts = nil
 	}
 
-	// TODO: Define network configuration if necessary
-
-	c, err := cli.ContainerCreate(ctx, config, hostConfig, nil, nil, "")
+	c, err := cli.ContainerCreate(ctx, config, hostConfig, netConfig, nil, "")
 	if err != nil {
 		return err
 	}
@@ -155,9 +211,11 @@ func runContainer(ctx context.Context, cli *client.Client, imageName, sourceMoun
 
 // Cleans up running containers
 func cleanUp(ctx context.Context, cli *client.Client) error {
+	fmt.Println("Exiting -- Cleaning up the NLP Suite...")
 	// Get all running containers
 	containers, err := cli.ContainerList(ctx, container.ListOptions{All: true})
 	if err != nil {
+		fmt.Println("Error cleaning up:", err)
 		return err
 	}
 
@@ -175,21 +233,40 @@ func cleanUp(ctx context.Context, cli *client.Client) error {
 		}
 	}
 
-	// Remove downloaded images (optional)
-	images, err := cli.ImageList(ctx, types.ImageListOptions{})
+	cli.NetworkRemove(ctx, networkName)
+	return nil
+}
+
+// Create the network
+func createNetwork(ctx context.Context, cli *client.Client) error {
+	networks, err := cli.NetworkList(ctx, types.NetworkListOptions{})
 	if err != nil {
 		return err
 	}
 
-	for _, image := range images {
-		for _, tag := range image.RepoTags {
-			if tag == uiImageName || tag == agentImageName { // Remove only specific images based on names
-				if _, err := cli.ImageRemove(ctx, image.ID, types.ImageRemoveOptions{Force: true}); err != nil {
-					fmt.Printf("Error removing image %s: %v\n", image.ID, err)
-				}
-			}
+	needsNetwork := true
+	for _, network := range networks {
+		if network.Name == networkName {
+			needsNetwork = false
 		}
 	}
 
+	if needsNetwork {
+		fmt.Println("Creating NLP Suite Network")
+		_, err := cli.NetworkCreate(ctx, networkName, types.NetworkCreate{
+			Driver: "bridge",
+			IPAM: &network.IPAM{
+				Config: []network.IPAMConfig{
+					{
+						Subnet: subnet,
+					},
+				},
+			},
+			Attachable: true,
+		})
+		return err
+	}
+
+	fmt.Println("Skipping NLP Suite Network... Already created")
 	return nil
 }
