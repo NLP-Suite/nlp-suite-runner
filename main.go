@@ -128,7 +128,7 @@ func main() {
 		os.Exit(0)
 	}()
 
-	fmt.Println("The NLP Suite is running... view the UI at http://localhost:8000")
+	fmt.Println("The NLP Suite is running... view the UI at http://127.0.0.1:8000")
 	select {}
 }
 
