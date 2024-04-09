@@ -9,10 +9,30 @@ The NLP Suite Runner is a binary that automatically installs 3 main packages:
 
 The NLP Suite Runner requires the presence and installation of [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 
+## ⚙️ Requirements
+
+To install the NLP Suite, Docker desktop requires at least 4GB of RAM.
+The NLP Suite Runner strongly encourages that you have at least 10 GB of storage available.
+
 ## 📦 Installation
 
 To install the NLP Suite Runner, first ensure that you have downloaded and installed [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 You can find a list of NLP Suite Runner binaries for your operating system in the latest release [here](https://github.com/NLP-Suite/nlp-suite-runner/releases/latest).
+
+## Mac
+
+### M-Chip Series
+
+If you have a mac running the ARM M-chip series, ensure that you install the `darwin-arm64` version of the NLP Suite Runner.
+
+### Intel Chip Series
+
+If you have the Intel chip, you will need to install the `darwin-amd64` version of the NLP Suite Runner.
+
+## Windows
+
+You most likely will need to install the `windows-amd64` version of the NLP Suite Runner.
+If your device has an ARM chip, ensure you have `windows-arm64` installed. To check which version you have, check [here](https://www.tenforums.com/tutorials/176966-how-check-if-processor-32-bit-64-bit-arm-windows-10-a.html).
 
 ### Mac / Linux Systems
 
