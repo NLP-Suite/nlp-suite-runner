@@ -1,0 +1,50 @@
+# NLP Suite Runner
+
+The NLP Suite Runner is the new, official tool to install and run the NLP Suite.
+The NLP Suite Runner is a binary that automatically installs 3 main packages:
+
+- NLP Suite UI: the user interface to interact with the NLP Suite Agent
+- NLP Suite Agent: the core algorithms and tools provided by the NLP Suite
+- Stanford CoreNLP: a dependency needed to run the NLP Suite
+
+The NLP Suite Runner requires the presence and installation of [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+
+## Installation
+
+To install the NLP Suite Runner, first ensure that you have downloaded and installed [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+You can find a list of NLP Suite Runner binaries for your operating system in the latest release [here](https://github.com/NLP-Suite/nlp-suite-runner/releases/latest).
+
+### Mac / Linux Systems
+
+Mac and Linux systems can easily extract `.tar.gz` files without additional tools.
+
+### Windows
+
+To extract the runner, you will need [7-zip](https://www.7-zip.org/), a file archiver tool for Windows.
+
+## Running the NLP Suite Runner
+
+**First ensure that you have first started Docker Desktop. It is required to run the NLP Suite Runner.**
+To run the NLP Suite Runner, double click the binary/exe to start it.
+
+### Mac Systems
+
+You may see an error indicating that the NLP Suite Runner cannot be opened because it is not coming from a trusted source.
+This is expected to occur the first time you run the NLP Suite Runner. To start the runner, follow [these instructions to allow the NLP Suite Runner to open.](https://www.macworld.com/article/672947/how-to-open-a-mac-app-from-an-unidentified-developer.html#:~:text=Open%20System%20Settings.-,Go%20to%20Privacy%20%26%20Security.,Click%20the%20Open%20Anyway%20button.)
+
+### Windows / Linux Systems
+
+There are no known issues for starting and running the NLP Suite Runner at this time.
+
+### Updating the NLP Suite Runner
+
+While the NLP Suite Runner automatically updates the installed packages mentioned above, the NLP Suite Runner does not automatically update itself.
+Periodically check this page to ensure you have the latest version installed.
+
+## Reporting issues
+
+If there are any issues you are encountering, header over to [Issues](https://github.com/NLP-Suite/nlp-suite-runner/issues) to open a ticket.
+
+## Contributing
+
+If you would like to contribute to the NLP Suite, please contact [Roberto Franzosi](https://sociology.emory.edu/people/bios/Franzosi-Roberto.html)
