@@ -9,7 +9,7 @@ The NLP Suite Runner is a binary that automatically installs 3 main packages:
 
 The NLP Suite Runner requires the presence and installation of [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 
-## Installation
+## 📦 Installation
 
 To install the NLP Suite Runner, first ensure that you have downloaded and installed [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 You can find a list of NLP Suite Runner binaries for your operating system in the latest release [here](https://github.com/NLP-Suite/nlp-suite-runner/releases/latest).
@@ -22,7 +22,7 @@ Mac and Linux systems can easily extract `.tar.gz` files without additional tool
 
 To extract the runner, you will need [7-zip](https://www.7-zip.org/), a file archiver tool for Windows.
 
-## Running the NLP Suite Runner
+## ⚡️ Running the NLP Suite Runner
 
 **First ensure that you have first started Docker Desktop. It is required to run the NLP Suite Runner.**
 To run the NLP Suite Runner, double click the binary/exe to start it.
@@ -41,10 +41,10 @@ There are no known issues for starting and running the NLP Suite Runner at this 
 While the NLP Suite Runner automatically updates the installed packages mentioned above, the NLP Suite Runner does not automatically update itself.
 Periodically check this page to ensure you have the latest version installed.
 
-## Reporting issues
+## 📣 Reporting issues
 
 If there are any issues you are encountering, header over to [Issues](https://github.com/NLP-Suite/nlp-suite-runner/issues) to open a ticket.
 
-## Contributing
+## 💻 Contributing
 
 If you would like to contribute to the NLP Suite, please contact [Roberto Franzosi](https://sociology.emory.edu/people/bios/Franzosi-Roberto.html)
