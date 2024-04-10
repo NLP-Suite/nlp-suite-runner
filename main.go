@@ -128,7 +128,12 @@ func main() {
 		os.Exit(0)
 	}()
 
-	fmt.Println("The NLP Suite is running... view the UI at http://127.0.0.1:8000")
+	if home, err := os.UserHomeDir(); err != nil {
+		fmt.Println("Could not find the location of your home folder!")
+		return
+	} else {
+		fmt.Printf("The NLP Suite is running... view the UI at http://127.0.0.1:8000\nYour NLP Suite folder can be found at: %s\n", path.Join(home, agentSourceFolder))
+	}
 	select {}
 }
 
