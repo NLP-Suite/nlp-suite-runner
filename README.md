@@ -54,6 +54,7 @@ There are no known issues for starting and running the NLP Suite Runner at this 
 
 ### Input / Output Directories
 Currently, the input and output directories are hard coded.
+For Mac users, the fold is loacated in the home folder. The the home folder is not directly appear in your Finder, follow the instructions in this link to get access: https://www.tomsguide.com/how-to/how-to-find-the-home-folder-on-mac-and-add-it-to-finder
 Make sure that the files are uploaded individually into the input directory and not inside of another folder. 
 
 ### Updating the NLP Suite Runner
