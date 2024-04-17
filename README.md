@@ -52,6 +52,10 @@ This is expected to occur the first time you run the NLP Suite Runner. To start 
 
 There are no known issues for starting and running the NLP Suite Runner at this time.
 
+### Input / Output Directories
+Currently, the input and output directories are hard coded.
+Make sure that the files are uploaded individually into the input directory and not inside of another folder. 
+
 ### Updating the NLP Suite Runner
 
 While the NLP Suite Runner automatically updates the installed packages mentioned above, the NLP Suite Runner does not automatically update itself.
