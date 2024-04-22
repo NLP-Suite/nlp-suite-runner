@@ -1,12 +1,14 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"fmt"
 	"io"
 	"os"
 	"os/signal"
 	"path"
+	"strings"
 	"syscall"
 
 	"github.com/docker/docker/api/types"
@@ -46,7 +48,7 @@ func main() {
 		return
 	}
 
-	defer func() { cleanUp(ctx, cli) }()
+	defer func() { cleanUp(ctx, cli, true) }()
 
 	if os.Getenv("ENV") != "dev" {
 		// Pull the latest UI image
@@ -55,6 +57,9 @@ func main() {
 			fmt.Println("Error pulling UI image:", err)
 			return
 		}
+
+		fmt.Println("Cleaning up any previous artifacts of the NLP Suite...")
+		cleanUp(ctx, cli, false)
 
 		// Pull the latest agent image
 		fmt.Println("Installing the latest version of the NLP Suite Agent...")
@@ -124,7 +129,7 @@ func main() {
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-c
-		cleanUp(ctx, cli)
+		cleanUp(ctx, cli, true)
 		os.Exit(0)
 	}()
 
@@ -174,6 +179,7 @@ func runContainer(ctx context.Context, cli *client.Client, imageName, sourceMoun
 	config := &container.Config{
 		Image: imageName,
 	}
+
 	hostConfig := &container.HostConfig{
 		Mounts: []mount.Mount{
 			{
@@ -202,7 +208,10 @@ func runContainer(ctx context.Context, cli *client.Client, imageName, sourceMoun
 		hostConfig.Mounts = nil
 	}
 
-	c, err := cli.ContainerCreate(ctx, config, hostConfig, netConfig, nil, "")
+	containerTokens := strings.Split(imageName, "/")
+	containerName := strings.Trim(strings.ReplaceAll(strings.Split(containerTokens[len(containerTokens)-1], ":")[0], "-", "_"), "/")
+
+	c, err := cli.ContainerCreate(ctx, config, hostConfig, netConfig, nil, containerName)
 	if err != nil {
 		return err
 	}
@@ -215,7 +224,7 @@ func runContainer(ctx context.Context, cli *client.Client, imageName, sourceMoun
 }
 
 // Cleans up running containers
-func cleanUp(ctx context.Context, cli *client.Client) error {
+func cleanUp(ctx context.Context, cli *client.Client, isExit bool) error {
 	fmt.Println("Exiting -- Cleaning up the NLP Suite...")
 	// Get all running containers
 	containers, err := cli.ContainerList(ctx, container.ListOptions{All: true})
@@ -239,6 +248,13 @@ func cleanUp(ctx context.Context, cli *client.Client) error {
 	}
 
 	cli.NetworkRemove(ctx, networkName)
+
+	if isExit {
+		reader := bufio.NewReader(os.Stdin)
+		fmt.Println("The NLP Suite has successfully closed... please type ENTER to close this window.")
+		reader.ReadString('\n')
+	}
+
 	return nil
 }
 
