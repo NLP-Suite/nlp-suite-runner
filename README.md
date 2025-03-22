@@ -40,8 +40,8 @@ If your device has an ARM chip, ensure you have `windows-arm64` installed. To ch
 
 ## ⚡️ Running the NLP Suite Runner
 
-**First ensure that you have first started Docker Desktop. It is required to run the NLP Suite Runner.**
-To run the NLP Suite Runner, double click the binary/exe to start it.
+To run the NLP Suite Runner, double click the binary/exe.
+**You must first start Docker Desktop. It is required to run the NLP Suite Runner.**
 
 ### Mac Systems
 
