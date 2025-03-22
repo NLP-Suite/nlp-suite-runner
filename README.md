@@ -7,7 +7,7 @@ The NLP Suite Runner is a binary that automatically installs 3 main packages:
 - NLP Suite Agent: the core algorithms and tools provided by the NLP Suite
 - Stanford CoreNLP: a dependency needed to run the NLP Suite
 
-The NLP Suite Runner requires the presence and installation of [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+##The NLP Suite Runner requires the presence and installation of## [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 
 ## ⚙️ Requirements
 
