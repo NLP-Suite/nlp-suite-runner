@@ -81,9 +81,14 @@ Currently, the input and output directories are hard coded. DO NOT TRY ALTER THE
 
 For **Mac users**, the folder is located in your home folder. The home folder may not directly appear in your Finder. To convinently add your home folder to Finder, use these [instructions](https://www.tomsguide.com/how-to/how-to-find-the-home-folder-on-mac-and-add-it-to-finder).
 
-For **Windows users**, the folder is located in your home folder. The home folder may not directly appear in your Finder. To convinently add your home folder to Finder, use 
+For **Windows users**, the two Input & Output folders folder is automatically installed for you in your users: folder.
+![image](https://github.com/user-attachments/assets/f0738bb2-5903-4aee-8e02-05a4a16004f6)
+![image](https://github.com/user-attachments/assets/e55dc6f7-0929-4a7f-9f1d-99cde4bd0022)
+For isntance rfranzo and within it nlp-suite
+![image](https://github.com/user-attachments/assets/f8b58041-1683-45a7-a073-6d2a3895abc7)
+The path would be **C:\Users\rfranzo\nlp-suite**
 
-**Make sure that the files are uploaded individually into the input directory and not inside of another folder.**
+**Make sure that your corpus files are uploaded into the input directory (e.g., C:\Users\rfranzo\nlp-suite\input) and not inside a sub-folder of this directory.**
 
 ### Updating the NLP Suite Runner
 
