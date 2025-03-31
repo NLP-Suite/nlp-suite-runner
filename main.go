@@ -137,7 +137,7 @@ func main() {
 		fmt.Println("Could not find the location of your home folder!")
 		return
 	} else {
-		fmt.Printf("The NLP Suite is running... view the UI at http://127.0.0.1:8000\nYour NLP Suite folder can be found at: %s\n", path.Join(home, agentSourceFolder))
+		fmt.Printf("The NLP Suite is running... copy the following address to a browser to open the NLP Suite at http://127.0.0.1:8000\nYour NLP Suite folder can be found at: %s\n", path.Join(home, agentSourceFolder))
 	}
 	select {}
 }
