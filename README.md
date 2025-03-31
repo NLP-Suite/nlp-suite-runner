@@ -83,9 +83,9 @@ For **Mac users**, the folder is located in your home folder. The home folder ma
 
 For **Windows users**, the two Input & Output folders are automatically installed for you in your Users: folder.
 ![image](https://github.com/user-attachments/assets/f0738bb2-5903-4aee-8e02-05a4a16004f6)
-![image](https://github.com/user-attachments/assets/e55dc6f7-0929-4a7f-9f1d-99cde4bd0022)
-For isntance rfranzo and within it nlp-suite
-![image](https://github.com/user-attachments/assets/f8b58041-1683-45a7-a073-6d2a3895abc7)
+![image](https://github.com/user-attachments/assets/e55dc6f7-0929-4a7f-9f1d-99cde4bd0022)  
+For instance rfranzo and within it nlp-suite
+![image](https://github.com/user-attachments/assets/f8b58041-1683-45a7-a073-6d2a3895abc7)  
 The path would be **C:\Users\rfranzo\nlp-suite**
 
 **Make sure that your corpus files are uploaded into the input directory (e.g., C:\Users\rfranzo\nlp-suite\input) and not inside a sub-folder of this directory.**
