@@ -25,24 +25,24 @@ To run GIS (Geographic Information System) mapping via **Google Earth Pro**, rat
 
 To display network graphs via **Gephi**, you need to download and install Gephi; click [here](https://gephi.org/users/download/) to download Gephi. 
 
-  # Mac
-  
-  Mac and Linux systems can easily extract `.tar.gz` files without additional tools.
-  
-  #### M-Chip Series
-  
-  If you have a mac running the ARM M-chip series, ensure that you install the `darwin-arm64` version of the NLP Suite Runner.
-  
-  #### Intel Chip Series
-  
-  If you have the Intel chip, you will need to install the `darwin-amd64` version of the NLP Suite Runner.
-  
-  ### Windows
-  
-  To extract the runner, you will need [7-zip](https://www.7-zip.org/), a file archiver tool for Windows.
-  
-  You most likely will need to install the `windows-amd64` version of the NLP Suite Runner.
-  If your device has an ARM chip, ensure you have `windows-arm64` installed. To check which version you have, check [here](https://www.tenforums.com/tutorials/176966-how-check-if-processor-32-bit-64-bit-arm-windows-10-a.html).
+-# Mac
+
+Mac and Linux systems can easily extract `.tar.gz` files without additional tools.
+
+#### M-Chip Series
+
+If you have a mac running the ARM M-chip series, ensure that you install the `darwin-arm64` version of the NLP Suite Runner.
+
+#### Intel Chip Series
+
+If you have the Intel chip, you will need to install the `darwin-amd64` version of the NLP Suite Runner.
+
+### Windows
+
+To extract the runner, you will need [7-zip](https://www.7-zip.org/), a file archiver tool for Windows.
+
+You most likely will need to install the `windows-amd64` version of the NLP Suite Runner.
+If your device has an ARM chip, ensure you have `windows-arm64` installed. To check which version you have, check [here](https://www.tenforums.com/tutorials/176966-how-check-if-processor-32-bit-64-bit-arm-windows-10-a.html).
 
 ## ⚡️ Running the NLP Suite Runner
 
