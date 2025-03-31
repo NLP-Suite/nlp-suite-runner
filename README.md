@@ -56,6 +56,9 @@ When the runner starts, cpy the address on an open brower to visualize the NLP S
 
 ![image](https://github.com/user-attachments/assets/fe12e55b-8af0-4b9b-8392-652eed9ad1ef)
 
+Click on the NLP tool you wish to run, e.g., Sentiment analysis
+
+![image](https://github.com/user-attachments/assets/a1d157e1-87bd-42f5-8cc5-98a107f0e508)
 
 
 ### Mac Systems
