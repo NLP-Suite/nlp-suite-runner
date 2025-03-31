@@ -21,7 +21,7 @@ You can find a list of NLP Suite Runner binaries for your operating system in th
 
 To run GIS (Geographic Information System) mapping via **Google Earth Pro**, rather than the default Python Folium, you need to download and install Google Earth Pro; click [here](https://www.google.com/earth/download/gep/agree.html?hl=en-GB) to download Google Earth Pro.
 
-To display network graphs via **Gephi**, you need to deanload and install Gephi. Click [here](https://gephi.org/users/download/) to download Gephi. 
+To display network graphs via **Gephi**, you need to download and install Gephi; click [here](https://gephi.org/users/download/) to download Gephi. 
 
 ### Mac
 
