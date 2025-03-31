@@ -25,7 +25,7 @@ To run GIS (Geographic Information System) mapping via **Google Earth Pro**, rat
 
 To display network graphs via **Gephi**, you need to download and install Gephi; click [here](https://gephi.org/users/download/) to download Gephi. 
 
-  ### Mac
+  # Mac
   
   Mac and Linux systems can easily extract `.tar.gz` files without additional tools.
   
