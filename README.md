@@ -60,6 +60,12 @@ Click on the NLP tool you wish to run, e.g., Sentiment analysis
 
 ![image](https://github.com/user-attachments/assets/a1d157e1-87bd-42f5-8cc5-98a107f0e508)
 
+The input and output directories are disabled. You cannot change the values.
+
+![image](https://github.com/user-attachments/assets/7c492712-d65c-4152-b00c-1d3931396a8a)
+
+So... how can yyou change those directories? See, below the section **Input / Output Directories**
+
 
 ### Mac Systems
 
