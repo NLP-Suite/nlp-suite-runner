@@ -81,7 +81,7 @@ Currently, the input and output directories are hard coded. DO NOT TRY ALTER THE
 
 For **Mac users**, the folder is located in your home folder. The home folder may not directly appear in your Finder. To convinently add your home folder to Finder, use these [instructions](https://www.tomsguide.com/how-to/how-to-find-the-home-folder-on-mac-and-add-it-to-finder).
 
-For **Windows users**, the two Input & Output folders are automatically installed for you in your users: folder.
+For **Windows users**, the two Input & Output folders are automatically installed for you in your Users: folder.
 ![image](https://github.com/user-attachments/assets/f0738bb2-5903-4aee-8e02-05a4a16004f6)
 ![image](https://github.com/user-attachments/assets/e55dc6f7-0929-4a7f-9f1d-99cde4bd0022)
 For isntance rfranzo and within it nlp-suite
