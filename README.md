@@ -51,6 +51,13 @@ To run the NLP Suite Runner, double click the binary/exe.
 ![image](https://github.com/user-attachments/assets/0b881596-c8b8-47e7-a63d-522475ffee4e)
 It is required to run the NLP Suite Runner.**
 
+When the runner starts, cpy the address on an open brower to visualize the NLP Suite 
+![image](https://github.com/user-attachments/assets/bea8b5ab-10b6-472d-b039-fc882b877900)
+
+![image](https://github.com/user-attachments/assets/fe12e55b-8af0-4b9b-8392-652eed9ad1ef)
+
+
+
 ### Mac Systems
 
 You may see an error indicating that the NLP Suite Runner cannot be opened because it is not coming from a trusted source.
