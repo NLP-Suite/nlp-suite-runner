@@ -17,7 +17,9 @@ The NLP Suite Runner strongly encourages that you have at least 10 GB of storage
 ## 📦 Installation
 
 To install the NLP Suite Runner, first ensure that you have downloaded and installed [Docker Desktop](https://www.docker.com/products/docker-desktop/).
-You can find a list of NLP Suite Runner binaries for your operating system in the latest release [here](https://github.com/NLP-Suite/nlp-suite-runner/releases/latest).
+You can download the proper NLP Suite via Docker executable for your operating system in the latest release [here](https://github.com/NLP-Suite/nlp-suite-runner/releases/latest).
+The executable will be downloaded and placed to a location of your choice. The executable (nlp-suite-runner.exec) will look like this: <img width="131" alt="Screenshot 2025-03-31 at 4 22 37 PM" src="https://github.com/user-attachments/assets/df863362-df60-4bcc-b266-e56932ff9717" />
+
 
 To run GIS (Geographic Information System) mapping via **Google Earth Pro**, rather than the default Python Folium, you need to download and install Google Earth Pro; click [here](https://www.google.com/earth/download/gep/agree.html?hl=en-GB) to download Google Earth Pro.
 
