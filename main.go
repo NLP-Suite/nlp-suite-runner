@@ -99,6 +99,13 @@ func main() {
 		return
 	}
 
+	fmt.Println("Validating the NLP Suite CSV Input Folder...")
+	_, err = validateMountPoint(path.Join(agentSourceFolder, "csvInput"))
+	if err != nil {
+		fmt.Println("Error creating csvInput folder:", err)
+		return
+	}
+
 	// Create the network
 	fmt.Println("Creating the NLP Suite network...")
 	if err := createNetwork(ctx, cli); err != nil {
