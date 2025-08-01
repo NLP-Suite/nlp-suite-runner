@@ -23,12 +23,19 @@ const (
 	uiImageName              = "ghcr.io/nlp-suite/nlp-suite-ui:main"
 	uiIpAddress              = "172.16.0.10"
 	uiPort                   = "8000"
+
 	agentImageName           = "ghcr.io/nlp-suite/nlp-suite-agent:main"
 	agentIpAddress           = "172.16.0.11"
 	agentPort                = "3000"
+
 	stanfordCoreNlpImageName = "ghcr.io/nlp-suite/stanford-corenlp-docker:master"
 	stanfordCoreNlpIpAddress = "172.16.0.12"
 	stanfordCoreNlpPort      = "9000"
+
+	malletImageName          = "ghcr.io/nlp-suite/nlp-suite-mallet:main" 
+    malletIpAddress          = "172.16.0.13"                            
+    malletPort               = "5050"   
+
 	agentSourceFolder        = "nlp-suite"
 	agentTargetMountPath     = "/root/nlp-suite"
 	networkName              = "nlp-suite-network"
@@ -74,6 +81,14 @@ func main() {
 			fmt.Println("Error pulling stanford corenlp image:", err)
 			return
 		}
+		
+		// Pull the latest mallet  image
+		fmt.Println("Installing the latest version of MALLET...")
+		if err := pullImage(ctx, cli, malletImageName); err != nil {
+			fmt.Println("Error pulling mallet image:", err)
+			return
+		}
+
 	} else {
 		fmt.Println("Skipping image installation because detected `dev` flag...")
 	}
@@ -125,11 +140,20 @@ func main() {
 		fmt.Println("Error running stanford corenlp server container:", err, ". The NLP Suite is continuing execution as some tools can be used without it.")
 	}
 
+	fmt.Println("Starting the MALLET Server...")
+	if err := runContainer(ctx, cli, malletImageName, "", "", malletIpAddress, malletPort); err != nil {
+		fmt.Println("Error running mallet container:", err, ". The NLP Suite is continuing execution as some tools can be used without it.")
+	}
+
+	
+
 	fmt.Println("Starting the NLP Suite Agent...")
 	if err := runContainer(ctx, cli, agentImageName, targetMountPath, agentTargetMountPath, agentIpAddress, agentPort); err != nil {
 		fmt.Println("Error running agent container:", err)
 		return
 	}
+
+	
 
 	// Wait indefinitely for container exit (or interrupt with Ctrl+C)
 	c := make(chan os.Signal)
