@@ -32,12 +32,13 @@ const (
 	stanfordCoreNlpIpAddress = "172.16.0.12"
 	stanfordCoreNlpPort      = "9000"
 
-	malletImageName          = "ghcr.io/nlp-suite/nlp-suite-mallet:main" 
+	malletImageName          = "ghcr.io/nlp-suite/mallet-docker:main" 
     malletIpAddress          = "172.16.0.13"                            
     malletPort               = "5050"   
 
 	agentSourceFolder        = "nlp-suite"
 	agentTargetMountPath     = "/root/nlp-suite"
+	malletTargetMountPath	 = "/app"
 	networkName              = "nlp-suite-network"
 	subnet                   = "172.16.0.0/16"
 )
@@ -141,7 +142,7 @@ func main() {
 	}
 
 	fmt.Println("Starting the MALLET Server...")
-	if err := runContainer(ctx, cli, malletImageName, "", "", malletIpAddress, malletPort); err != nil {
+	if err := runContainer(ctx, cli, malletImageName, targetMountPath, malletTargetMountPath, malletIpAddress, malletPort); err != nil {
 		fmt.Println("Error running mallet container:", err, ". The NLP Suite is continuing execution as some tools can be used without it.")
 	}
 
