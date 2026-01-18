@@ -10,6 +10,9 @@ import (
 	"path"
 	"strings"
 	"syscall"
+	"path/filepath"
+	"runtime"
+	"os/exec"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
@@ -43,11 +46,18 @@ const (
 	subnet                   = "172.16.0.0/16"
 )
 
+var googleEarthPath string
+
 func main() {
 
-	os.Setenv("DOCKER_API_VERSION", "1.42")
+	// os.Setenv("DOCKER_API_VERSION", "1.42")
 
 	ctx := context.Background()
+
+	googleEarthPath = findGoogleEarthPath()
+	fmt.Println("Google Earth Pro Path: ", googleEarthPath)
+	
+
 
 	// Create a new Docker client
 	cli, err := client.NewClientWithOpts(client.FromEnv)
@@ -212,6 +222,10 @@ func runContainer(ctx context.Context, cli *client.Client, imageName, sourceMoun
 		Image: imageName,
 	}
 
+	if strings.Contains(imageName, agentImageName) && googleEarthPath != "" {
+		config.Env = append(config.Env, "GOOGLE_EARTH_PATH="+googleEarthPath)
+	}
+
 	hostConfig := &container.HostConfig{
 		Mounts: []mount.Mount{
 			{
@@ -323,3 +337,65 @@ func createNetwork(ctx context.Context, cli *client.Client) error {
 	fmt.Println("Skipping NLP Suite Network... Already created")
 	return nil
 }
+
+func findGoogleEarthPath() string {
+    var candidatePaths []string
+
+    switch runtime.GOOS {
+    case "windows":
+        programFiles := os.Getenv("ProgramFiles")
+        programFilesX86 := os.Getenv("ProgramFiles(x86)")
+        localAppData := os.Getenv("LocalAppData")
+        candidatePaths = []string{
+            filepath.Join(programFiles, `Google\Google Earth Pro\client\googleearth.exe`),
+            filepath.Join(programFilesX86, `Google\Google Earth Pro\client\googleearth.exe`),
+            filepath.Join(localAppData, `Google\Google Earth Pro\client\googleearth.exe`),
+        }
+    case "darwin": // macOS
+        homeDir, _ := os.UserHomeDir()
+        candidatePaths = []string{
+            "/Applications/Google Earth Pro.app/Contents/MacOS/Google Earth",
+            "/Applications/Google Earth.app/Contents/MacOS/Google Earth",
+            filepath.Join(homeDir, "Applications/Google Earth Pro.app/Contents/MacOS/Google Earth"),
+            filepath.Join(homeDir, "Applications/Google Earth.app/Contents/MacOS/Google Earth"),
+        }
+    case "linux":
+        candidatePaths = []string{
+            "/usr/bin/google-earth-pro",
+            "/usr/local/bin/google-earth-pro",
+            "/opt/google/earth/pro/googleearth",
+        }
+    }
+
+    // Return the first path that actually exists on the disk
+    for _, p := range candidatePaths {
+        if _, err := os.Stat(p); err == nil {
+            if abs, err := filepath.Abs(p); err == nil {
+                return abs
+            }
+            return p
+        }
+    }
+
+    // Final check for Linux path lookup
+    if runtime.GOOS == "linux" {
+        if path, err := exec.LookPath("google-earth-pro"); err == nil {
+            return path
+        }
+    }
+
+    return ""
+}
+
+// func firstExisting(paths []string) string {
+// 	for _, p := range paths {
+// 		if _, err := os.Stat(p); err == nil {
+// 			abs, err := filepath.Abs(p)
+// 			if err == nil {
+// 				return abs
+// 			}
+// 			return p
+// 		}
+// 	}
+// 	return ""
+// }
